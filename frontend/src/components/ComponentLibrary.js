@@ -28,6 +28,22 @@ const ComponentLibrary = ({ components, onAddComponent, disabled }) => {
         AI Components
       </h3>
       
+      <div style={{
+        marginBottom: '1rem',
+        padding: '0.75rem',
+        background: 'rgba(34, 197, 94, 0.1)',
+        borderRadius: '6px',
+        border: '1px solid rgba(34, 197, 94, 0.2)',
+        fontSize: '0.85rem',
+        color: '#86efac',
+        lineHeight: 1.4
+      }}>
+        🧠 <strong>Build Your AI Brain:</strong><br/>
+        1. Add a <strong>Neural Layer</strong> first (this recognizes patterns)<br/>
+        2. Add an <strong>Activation Function</strong> (this helps it remember)<br/>
+        3. Draw shapes to teach your AI!
+      </div>
+      
       <div className="components-grid">
         {components.map((component, index) => (
           <motion.div
@@ -101,25 +117,6 @@ const ComponentLibrary = ({ components, onAddComponent, disabled }) => {
           </motion.div>
         ))}
       </div>
-      
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          background: 'rgba(59, 130, 246, 0.1)',
-          borderRadius: '6px',
-          border: '1px solid rgba(59, 130, 246, 0.2)',
-          fontSize: '0.8rem',
-          color: '#cbd5e1',
-          lineHeight: 1.4
-        }}
-      >
-        <Lightbulb size={14} style={{ marginRight: '0.5rem', color: '#60a5fa' }} />
-        Click components to add them to your AI build! Start with a Neural Layer to give your AI a brain.
-      </motion.div>
     </div>
   );
 };
