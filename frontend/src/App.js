@@ -452,8 +452,13 @@ function App() {
                 onStartTraining={startTraining}
                 isTraining={isTraining}
                 results={trainingResults}
-                canTrain={playerBuild.length > 0 && trainingData.length >= 3}
-                trainingDataCount={trainingData.length}
+                canTrain={
+                  currentLevel === 1 
+                    ? (playerBuild.length > 0 && trainingData.length >= 3)
+                    : (playerBuild.length >= 3)
+                }
+                trainingDataCount={currentLevel === 1 ? trainingData.length : playerBuild.length}
+                level={currentLevel}
               />
               
               {gamePhase === 'complete' && (
