@@ -36,6 +36,8 @@ const TrainingPanel = ({
         return "Add AI components first!";
       } else if (trainingDataCount < 3) {
         return `Need ${3 - trainingDataCount} more components`;
+      } else if (trainingDataCount < 4) {
+        return "Add more layers for better efficiency!";
       } else {
         return "Ready to simulate!";
       }
