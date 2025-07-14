@@ -49,31 +49,73 @@ function App() {
       setShowCelebration(false);
     } catch (error) {
       console.error('Failed to load level:', error);
-      // Fallback level data to prevent infinite loading
-      setLevelData({
-        id: levelId,
-        title: "Train Your First AI Pet",
-        description: "Draw shapes and watch your AI learn to recognize them!",
-        objective: "Train a neural network to classify hand-drawn shapes",
-        available_components: [
-          {
-            id: "neural_layer",
-            name: "Neural Layer",
-            description: "A layer of artificial neurons",
-            type: "layer",
-            icon: "brain"
-          },
-          {
-            id: "activation",
-            name: "Activation Function",
-            description: "Makes the network learn non-linear patterns",
-            type: "function",
-            icon: "zap"
-          }
-        ],
-        target_accuracy: 0.8,
-        max_epochs: 50
-      });
+      // Fallback level data to prevent infinite loading - provide appropriate fallback based on level
+      if (levelId === 2) {
+        setLevelData({
+          id: 2,
+          title: "Build Your First Neural Network",
+          description: "Learn to stack layers and create deeper AI networks!",
+          objective: "Build a multi-layer neural network and understand tensor flow",
+          available_components: [
+            {
+              id: "neural_layer",
+              name: "Neural Layer",
+              description: "A layer of artificial neurons",
+              type: "layer",
+              icon: "brain"
+            },
+            {
+              id: "activation",
+              name: "Activation Function",
+              description: "Makes the network learn non-linear patterns",
+              type: "function",
+              icon: "zap"
+            },
+            {
+              id: "dense_layer",
+              name: "Dense Layer",
+              description: "A fully connected layer for deeper learning",
+              type: "layer",
+              icon: "layers"
+            },
+            {
+              id: "dropout",
+              name: "Dropout",
+              description: "Prevents overfitting by randomly ignoring neurons",
+              type: "regularization",
+              icon: "lightbulb"
+            }
+          ],
+          target_accuracy: 0.85,
+          max_epochs: 100
+        });
+      } else {
+        // Default to Level 1 fallback
+        setLevelData({
+          id: levelId,
+          title: "Train Your First AI Pet",
+          description: "Draw shapes and watch your AI learn to recognize them!",
+          objective: "Train a neural network to classify hand-drawn shapes",
+          available_components: [
+            {
+              id: "neural_layer",
+              name: "Neural Layer",
+              description: "A layer of artificial neurons",
+              type: "layer",
+              icon: "brain"
+            },
+            {
+              id: "activation",
+              name: "Activation Function",
+              description: "Makes the network learn non-linear patterns",
+              type: "function",
+              icon: "zap"
+            }
+          ],
+          target_accuracy: 0.8,
+          max_epochs: 50
+        });
+      }
     }
   };
 
