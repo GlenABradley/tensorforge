@@ -114,8 +114,11 @@ function App() {
 
     setIsTraining(true);
     setGamePhase('training');
+    setAiPersonality('excited');
 
     try {
+      console.log('Starting training with data:', trainingData);
+      
       const response = await fetch(`${BACKEND_URL}/api/train-shape-classifier`, {
         method: 'POST',
         headers: {
@@ -127,7 +130,12 @@ function App() {
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const results = await response.json();
+      console.log('Training results:', results);
       setTrainingResults(results);
       
       if (results.success) {
@@ -138,10 +146,16 @@ function App() {
         // Celebration timeout
         setTimeout(() => {
           setShowCelebration(false);
-        }, 3000);
+        }, 4000);
+      } else {
+        setGamePhase('building');
+        setAiPersonality('curious');
       }
     } catch (error) {
       console.error('Training failed:', error);
+      alert(`Training failed: ${error.message}. Please try again.`);
+      setGamePhase('building');
+      setAiPersonality('curious');
     } finally {
       setIsTraining(false);
     }
