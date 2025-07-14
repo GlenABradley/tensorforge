@@ -225,6 +225,28 @@ async def simulate_build(build: GameBuild):
                 message="Neural network built successfully! Ready for training.",
                 visual_data={"network_structure": build.components}
             )
+        elif build.level_id == 2:
+            # Level 2: Network simulation with component validation
+            if len(build.components) >= 3:
+                # Simple simulation for Level 2
+                score = min(0.95, 0.7 + (len(build.components) * 0.05))
+                return SimulationResult(
+                    success=True,
+                    score=score,
+                    message=f"Network simulation complete! Built {len(build.components)} layers with {score:.1%} efficiency.",
+                    visual_data={
+                        "network_structure": build.components,
+                        "layer_count": len(build.components),
+                        "efficiency": score
+                    }
+                )
+            else:
+                return SimulationResult(
+                    success=False,
+                    score=0.0,
+                    message="Need at least 3 components to run simulation!",
+                    visual_data={"error": "insufficient_components"}
+                )
         else:
             # Standard tensor simulation
             result = engine.build_and_simulate(engine.level_data['inputs'])
