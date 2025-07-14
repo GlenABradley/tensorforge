@@ -75,9 +75,27 @@ const NetworkSimulator = ({ components, disabled, simulationData }) => {
         }}>
           <Database size={48} className="text-blue-400" style={{ marginBottom: '1rem' }} />
           <h4 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Build Your Network First!</h4>
-          <p style={{ color: '#cbd5e1', fontSize: '0.9rem' }}>
+          <p style={{ color: '#cbd5e1', fontSize: '0.9rem', marginBottom: '1rem' }}>
             Add components from the library to see how data flows through your neural network.
           </p>
+          
+          {/* Success criteria for empty state */}
+          <div style={{
+            padding: '0.75rem',
+            background: 'rgba(245, 158, 11, 0.1)',
+            borderRadius: '6px',
+            border: '1px solid rgba(245, 158, 11, 0.2)',
+            fontSize: '0.8rem',
+            color: '#fbbf24',
+            lineHeight: 1.4,
+            textAlign: 'left'
+          }}>
+            🎯 <strong>Success Requirements (85% efficiency):</strong>
+            <br />✅ Neural Layer (processes input data)
+            <br />✅ Dense Layer (learns complex patterns)  
+            <br />✅ Activation Function (adds non-linearity)
+            <br />⭐ Bonus: Add Dropout for better performance
+          </div>
         </div>
       </div>
     );
