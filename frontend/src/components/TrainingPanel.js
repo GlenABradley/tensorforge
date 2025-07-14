@@ -158,7 +158,7 @@ const TrainingPanel = ({
         ) : (
           <>
             <Play size={16} />
-            {canTrain ? 'Start Training' : getTrainingMessage()}
+            {getButtonText()}
           </>
         )}
       </motion.button>
