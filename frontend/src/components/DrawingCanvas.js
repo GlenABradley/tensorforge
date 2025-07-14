@@ -115,6 +115,19 @@ const DrawingCanvas = ({ onDrawingComplete, disabled, drawings }) => {
         Draw Training Examples
       </h3>
       
+      <div style={{
+        marginBottom: '1rem',
+        padding: '0.75rem',
+        background: 'rgba(59, 130, 246, 0.1)',
+        borderRadius: '6px',
+        border: '1px solid rgba(59, 130, 246, 0.2)',
+        fontSize: '0.85rem',
+        color: '#60a5fa',
+        lineHeight: 1.4
+      }}>
+        ✏️ <strong>Draw by Hand:</strong> Use your mouse or finger to draw shapes on the canvas below. Your AI will learn from your drawings!
+      </div>
+      
       <div className="drawing-controls">
         <div className="shape-selector">
           {shapes.map(shape => (
@@ -161,12 +174,12 @@ const DrawingCanvas = ({ onDrawingComplete, disabled, drawings }) => {
           disabled={disabled}
         >
           <RotateCcw size={14} />
-          Clear
+          Clear Canvas
         </button>
         
         <div className="drawing-hint">
           <span style={{ color: '#60a5fa', fontSize: '0.85rem' }}>
-            Draw a {selectedShape} above ↑
+            👆 Draw a {selectedShape} above, then it will be saved automatically!
           </span>
         </div>
       </div>
@@ -185,18 +198,18 @@ const DrawingCanvas = ({ onDrawingComplete, disabled, drawings }) => {
           }}
         >
           <div style={{ color: '#60a5fa', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-            Training Examples: {drawings.length}
+            ✅ Saved Training Examples: {drawings.length}
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {drawings.map(drawing => (
               <span
                 key={drawing.id}
                 style={{
-                  background: 'rgba(59, 130, 246, 0.2)',
+                  background: 'rgba(34, 197, 94, 0.2)',
                   padding: '0.25rem 0.5rem',
                   borderRadius: '4px',
                   fontSize: '0.8rem',
-                  color: '#cbd5e1'
+                  color: '#86efac'
                 }}
               >
                 {shapes.find(s => s.id === drawing.label)?.emoji} {drawing.label}
