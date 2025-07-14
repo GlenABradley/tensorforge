@@ -264,8 +264,10 @@ const TrainingPanel = ({
                 color: '#cbd5e1',
                 lineHeight: 1.4
               }}>
-                Your AI successfully learned to recognize shapes! 
-                It can now tell the difference between circles, squares, and triangles.
+                {level === 1 
+                  ? "Your AI successfully learned to recognize shapes! It can now tell the difference between circles, squares, and triangles."
+                  : "Your neural network successfully processed the data! The multi-layer architecture you built can now handle complex patterns and transformations."
+                }
               </div>
             </motion.div>
           )}
