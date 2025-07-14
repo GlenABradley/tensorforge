@@ -1,0 +1,311 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import DrawingCanvas from './components/DrawingCanvas';
+import ComponentLibrary from './components/ComponentLibrary';
+import NetworkBuilder from './components/NetworkBuilder';
+import TrainingPanel from './components/TrainingPanel';
+import ProgressDisplay from './components/ProgressDisplay';
+import LevelSelector from './components/LevelSelector';
+import { Brain, Zap, Target, Trophy, Sparkles } from 'lucide-react';
+import './App.css';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+
+function App() {
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [levelData, setLevelData] = useState(null);
+  const [playerBuild, setPlayerBuild] = useState([]);
+  const [drawings, setDrawings] = useState([]);
+  const [trainingData, setTrainingData] = useState([]);
+  const [isTraining, setIsTraining] = useState(false);
+  const [trainingResults, setTrainingResults] = useState(null);
+  const [gamePhase, setGamePhase] = useState('building'); // 'building', 'training', 'complete'
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [aiPersonality, setAiPersonality] = useState('curious'); // 'curious', 'excited', 'confident'
+
+  useEffect(() => {
+    loadLevel(currentLevel);
+  }, [currentLevel]);
+
+  const loadLevel = async (levelId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/levels/${levelId}`);
+      const data = await response.json();
+      setLevelData(data);
+      setPlayerBuild([]);
+      setDrawings([]);
+      setTrainingData([]);
+      setTrainingResults(null);
+      setGamePhase('building');
+      setShowCelebration(false);
+    } catch (error) {
+      console.error('Failed to load level:', error);
+    }
+  };
+
+  const addComponent = (component) => {
+    setPlayerBuild(prev => [...prev, { ...component, id: Date.now() }]);
+    
+    // AI personality reaction
+    if (component.id === 'neural_layer') {
+      setAiPersonality('excited');
+      setTimeout(() => setAiPersonality('curious'), 2000);
+    }
+  };
+
+  const removeComponent = (componentId) => {
+    setPlayerBuild(prev => prev.filter(comp => comp.id !== componentId));
+  };
+
+  const addDrawing = (drawingData, label) => {
+    const newDrawing = {
+      id: Date.now(),
+      points: drawingData,
+      label: label,
+      timestamp: new Date().toISOString()
+    };
+    
+    setDrawings(prev => [...prev, newDrawing]);
+    setTrainingData(prev => [
+      ...prev,
+      { drawing: drawingData, label: label }
+    ]);
+  };
+
+  const startTraining = async () => {
+    if (trainingData.length < 3) {
+      alert('Draw at least 3 shapes to train your AI!');
+      return;
+    }
+
+    setIsTraining(true);
+    setGamePhase('training');
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/train-shape-classifier`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          drawings: trainingData.map(d => ({ points: d.drawing })),
+          labels: trainingData.map(d => d.label)
+        })
+      });
+
+      const results = await response.json();
+      setTrainingResults(results);
+      
+      if (results.success) {
+        setGamePhase('complete');
+        setShowCelebration(true);
+        setAiPersonality('confident');
+        
+        // Celebration timeout
+        setTimeout(() => {
+          setShowCelebration(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Training failed:', error);
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
+  const resetLevel = () => {
+    loadLevel(currentLevel);
+  };
+
+  const nextLevel = () => {
+    if (currentLevel < 21) {
+      setCurrentLevel(currentLevel + 1);
+    }
+  };
+
+  const getAiMessage = () => {
+    if (isTraining) return "I'm learning from your drawings! 🧠";
+    
+    switch (aiPersonality) {
+      case 'excited':
+        return "Wow! A neural layer! I can feel myself getting smarter! ✨";
+      case 'confident':
+        return "I'm ready for anything now! What should we learn next? 🚀";
+      case 'curious':
+      default:
+        if (playerBuild.length === 0) {
+          return "Hi! I'm your AI pet. Help me learn by adding components! 🤖";
+        } else if (trainingData.length === 0) {
+          return "I have a brain now! Can you draw some shapes for me to learn? 🎨";
+        } else {
+          return `I've seen ${trainingData.length} drawings. Ready to start learning! 📚`;
+        }
+    }
+  };
+
+  if (!levelData) {
+    return (
+      <div className="loading-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        >
+          <Brain size={48} className="text-blue-400" />
+        </motion.div>
+        <p>Loading Tensor Forge...</p>
+      </div>
+    );
+  }
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="app">
+        <AnimatePresence>
+          {showCelebration && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              className="celebration-overlay"
+            >
+              <div className="celebration-content">
+                <motion.div
+                  animate={{ rotate: [0, 360], scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Trophy size={80} className="text-yellow-400" />
+                </motion.div>
+                <h2>Level Complete!</h2>
+                <p>Your AI learned to recognize shapes! 🎉</p>
+                <Sparkles className="celebration-sparkle" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <header className="app-header">
+          <div className="header-content">
+            <motion.div
+              className="logo"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Brain className="logo-icon" />
+              <span>Tensor Forge</span>
+            </motion.div>
+            
+            <LevelSelector 
+              currentLevel={currentLevel}
+              onLevelSelect={setCurrentLevel}
+            />
+            
+            <ProgressDisplay 
+              level={currentLevel}
+              phase={gamePhase}
+              score={trainingResults?.score}
+            />
+          </div>
+        </header>
+
+        <main className="app-main">
+          <div className="level-header">
+            <motion.h1
+              key={levelData.title}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="level-title"
+            >
+              <Target className="level-icon" />
+              {levelData.title}
+            </motion.h1>
+            <p className="level-description">{levelData.description}</p>
+          </div>
+
+          <div className="game-layout">
+            <div className="left-panel">
+              <ComponentLibrary 
+                components={levelData.available_components}
+                onAddComponent={addComponent}
+                disabled={gamePhase === 'training'}
+              />
+              
+              <motion.div 
+                className="ai-chat"
+                animate={{ 
+                  scale: aiPersonality === 'excited' ? [1, 1.05, 1] : 1,
+                  backgroundColor: 
+                    aiPersonality === 'excited' ? '#1e40af' :
+                    aiPersonality === 'confident' ? '#059669' : '#374151'
+                }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="ai-avatar">
+                  <motion.div
+                    animate={{ 
+                      rotate: isTraining ? 360 : 0,
+                      scale: isTraining ? [1, 1.1, 1] : 1
+                    }}
+                    transition={{ 
+                      duration: isTraining ? 2 : 0.5,
+                      repeat: isTraining ? Infinity : 0
+                    }}
+                  >
+                    <Brain size={24} />
+                  </motion.div>
+                </div>
+                <div className="ai-message">
+                  {getAiMessage()}
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="center-panel">
+              <NetworkBuilder
+                components={playerBuild}
+                onRemoveComponent={removeComponent}
+                disabled={gamePhase === 'training'}
+              />
+              
+              {currentLevel === 1 && (
+                <DrawingCanvas
+                  onDrawingComplete={addDrawing}
+                  disabled={gamePhase === 'training'}
+                  drawings={drawings}
+                />
+              )}
+            </div>
+
+            <div className="right-panel">
+              <TrainingPanel
+                onStartTraining={startTraining}
+                isTraining={isTraining}
+                results={trainingResults}
+                canTrain={playerBuild.length > 0 && trainingData.length >= 3}
+                trainingDataCount={trainingData.length}
+              />
+              
+              {gamePhase === 'complete' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="level-complete-actions"
+                >
+                  <button onClick={resetLevel} className="secondary-button">
+                    Try Again
+                  </button>
+                  <button onClick={nextLevel} className="primary-button">
+                    Next Level <Zap size={16} />
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </main>
+      </div>
+    </DndProvider>
+  );
+}
+
+export default App;
