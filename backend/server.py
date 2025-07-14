@@ -204,19 +204,6 @@ async def train_shape_classifier(training_data: TrainingData):
 async def simulate_build(build: GameBuild):
     """Simulate a player's component build"""
     try:
-        # Load the specified level
-        success = levels_manager.load_level(build.level_id)
-        if not success:
-            raise HTTPException(status_code=404, detail="Level not found")
-        
-        # Clear previous build
-        engine.player_build = []
-        
-        # Add components to build
-        for component in build.components:
-            engine.append_to_build(component["name"], *component.get("args", []))
-        
-        # Run simulation
         if build.level_id == 1:
             # Special handling for shape classifier level
             return SimulationResult(
@@ -227,27 +214,89 @@ async def simulate_build(build: GameBuild):
             )
         elif build.level_id == 2:
             # Level 2: Network simulation with component validation
-            if len(build.components) >= 3:
-                # Simple simulation for Level 2
-                score = min(0.95, 0.7 + (len(build.components) * 0.05))
-                return SimulationResult(
-                    success=True,
-                    score=score,
-                    message=f"Network simulation complete! Built {len(build.components)} layers with {score:.1%} efficiency.",
-                    visual_data={
-                        "network_structure": build.components,
-                        "layer_count": len(build.components),
-                        "efficiency": score
-                    }
-                )
-            else:
+            if len(build.components) < 3:
                 return SimulationResult(
                     success=False,
                     score=0.0,
                     message="Need at least 3 components to run simulation!",
                     visual_data={"error": "insufficient_components"}
                 )
+            
+            # Validate component types for proper network architecture
+            component_types = [comp.get("type", "") for comp in build.components]
+            component_names = [comp.get("name", "") for comp in build.components]
+            
+            # Check for required components
+            has_neural_layer = any("Neural Layer" in name for name in component_names)
+            has_activation = any("Activation" in name for name in component_names)
+            
+            # Calculate score based on architecture quality
+            base_score = 0.6  # Base score for having 3+ components
+            
+            # Bonus for having essential components
+            if has_neural_layer:
+                base_score += 0.15
+            if has_activation:
+                base_score += 0.1
+            
+            # Bonus for component diversity
+            unique_types = len(set(component_types))
+            if unique_types >= 3:
+                base_score += 0.1
+            
+            # Bonus for proper layering (Dense layers)
+            dense_layers = sum(1 for name in component_names if "Dense" in name)
+            if dense_layers > 0:
+                base_score += min(0.1, dense_layers * 0.05)
+            
+            # Final score calculation
+            final_score = min(0.95, base_score)
+            success = final_score >= 0.85
+            
+            if success:
+                message = f"Excellent network architecture! Your {len(build.components)}-layer network achieved {final_score:.1%} efficiency."
+            else:
+                missing = []
+                if not has_neural_layer:
+                    missing.append("Neural Layer")
+                if not has_activation:
+                    missing.append("Activation Function")
+                if len(build.components) < 4:
+                    missing.append("more layers for depth")
+                
+                message = f"Network needs improvement. Try adding: {', '.join(missing)}. Current efficiency: {final_score:.1%}"
+            
+            return SimulationResult(
+                success=success,
+                score=final_score,
+                message=message,
+                visual_data={
+                    "network_structure": build.components,
+                    "layer_count": len(build.components),
+                    "efficiency": final_score,
+                    "has_neural_layer": has_neural_layer,
+                    "has_activation": has_activation,
+                    "component_breakdown": {
+                        "neural_layers": sum(1 for name in component_names if "Neural" in name),
+                        "dense_layers": dense_layers,
+                        "activation_functions": sum(1 for name in component_names if "Activation" in name),
+                        "dropout_layers": sum(1 for name in component_names if "Dropout" in name)
+                    }
+                }
+            )
         else:
+            # Load the specified level
+            success = levels_manager.load_level(build.level_id)
+            if not success:
+                raise HTTPException(status_code=404, detail="Level not found")
+            
+            # Clear previous build
+            engine.player_build = []
+            
+            # Add components to build
+            for component in build.components:
+                engine.append_to_build(component["name"], *component.get("args", []))
+            
             # Standard tensor simulation
             result = engine.build_and_simulate(engine.level_data['inputs'])
             success = engine.check_win(result, engine.level_data['target'])
@@ -263,7 +312,8 @@ async def simulate_build(build: GameBuild):
         return SimulationResult(
             success=False,
             score=0.0,
-            message=f"Simulation failed: {str(e)}"
+            message=f"Simulation failed: {str(e)}",
+            visual_data={"error": "simulation_failed"}
         )
 
 # Helper classes and functions
