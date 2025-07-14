@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Zap, Layers, Plus, Lightbulb } from 'lucide-react';
 
-const ComponentLibrary = ({ components, onAddComponent, disabled }) => {
+const ComponentLibrary = ({ components, onAddComponent, disabled, level = 1 }) => {
   const getComponentIcon = (iconName) => {
     const icons = {
       brain: Brain,
