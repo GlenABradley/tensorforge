@@ -216,6 +216,26 @@ function App() {
   const getAiMessage = () => {
     if (isTraining) return "I'm learning from your drawings! 🧠";
     
+    // Level-specific AI messages
+    if (currentLevel === 2) {
+      switch (aiPersonality) {
+        case 'excited':
+          return "More layers! I'm getting more powerful! 🚀";
+        case 'confident':
+          return "I'm ready to tackle complex problems now! 💪";
+        case 'curious':
+        default:
+          if (playerBuild.length === 0) {
+            return "Hi! I'm ready for Level 2. Let's build a deeper network! 🧠";
+          } else if (playerBuild.length < 3) {
+            return "Add more layers to make me smarter! I need at least 3 components. 🎯";
+          } else {
+            return `Great! I have ${playerBuild.length} components. Ready to process data! 📊`;
+          }
+      }
+    }
+    
+    // Level 1 messages
     switch (aiPersonality) {
       case 'excited':
         return "Wow! A neural layer! I can feel myself getting smarter! ✨";
