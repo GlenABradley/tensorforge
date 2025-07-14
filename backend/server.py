@@ -75,6 +75,51 @@ async def get_level(level_id: int):
             "target_accuracy": 0.8,
             "max_epochs": 50
         }
+    elif level_id == 2:
+        return {
+            "id": 2,
+            "title": "Build Your First Neural Network",
+            "description": "Learn to stack layers and create deeper AI networks!",
+            "objective": "Build a multi-layer neural network and understand tensor flow",
+            "available_components": [
+                {
+                    "id": "neural_layer",
+                    "name": "Neural Layer",
+                    "description": "A layer of artificial neurons",
+                    "type": "layer",
+                    "icon": "brain"
+                },
+                {
+                    "id": "activation",
+                    "name": "Activation Function",
+                    "description": "Makes the network learn non-linear patterns",
+                    "type": "function",
+                    "icon": "zap"
+                },
+                {
+                    "id": "dense_layer",
+                    "name": "Dense Layer",
+                    "description": "A fully connected layer for deeper learning",
+                    "type": "layer",
+                    "icon": "layers"
+                },
+                {
+                    "id": "dropout",
+                    "name": "Dropout",
+                    "description": "Prevents overfitting by randomly ignoring neurons",
+                    "type": "regularization",
+                    "icon": "lightbulb"
+                }
+            ],
+            "target_accuracy": 0.85,
+            "max_epochs": 100,
+            "inputs": [
+                [1, 2, 3, 4],
+                [5, 6, 7, 8],
+                [9, 10, 11, 12]
+            ],
+            "target": [0.8, 0.9, 0.95]
+        }
     else:
         raise HTTPException(status_code=404, detail="Level not found")
 
