@@ -12,8 +12,14 @@ func snap_and_simulate():
 # frontend/components/AddOp.gd
 extends "res://frontend/TensorOrb.gd"
 
-var texture = preload("res://frontend/assets/gears.png")  # Load your PNG
+var texture = preload("res://frontend/assets/gears.png")
 
 func _ready():
-    $Sprite2D.texture = texture  # Assume Sprite2D child node
-    print("Gears loaded with transparent BG")
+    $Sprite2D.texture = texture
+    $Sprite2D.modulate.a = 1.0  # Full opacity, huge trans areas auto-handle
+
+func snap_and_simulate():
+    .snap_and_simulate()
+    # Animate gears spin on success
+    $AnimationPlayer.play("spin_gears")  # Add AnimationPlayer node in scene
+
