@@ -93,7 +93,7 @@ const TrainingPanel = ({
       
       <div className="training-stats">
         <div className="stat-item">
-          <span className="stat-label">Training Examples</span>
+          <span className="stat-label">{getStatsLabel()}</span>
           <motion.span 
             className="stat-value"
             animate={{ scale: trainingDataCount > 0 ? [1, 1.1, 1] : 1 }}
@@ -105,7 +105,7 @@ const TrainingPanel = ({
         
         <div className="stat-item">
           <span className="stat-label">Target Accuracy</span>
-          <span className="stat-value">80%</span>
+          <span className="stat-value">{level === 1 ? "80%" : "85%"}</span>
         </div>
         
         {results && (
