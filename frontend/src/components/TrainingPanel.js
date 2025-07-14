@@ -85,8 +85,10 @@ const TrainingPanel = ({
             🧠 Training Neural Network...
           </motion.div>
           <div style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.4 }}>
-            Your AI is learning to recognize shapes by studying your drawings. 
-            This involves adjusting thousands of connections in the neural network!
+            {level === 1 
+              ? "Your AI is learning to recognize shapes by studying your drawings. This involves adjusting thousands of connections in the neural network!"
+              : "Your AI is processing data through the network layers you built. Each layer transforms the data to extract meaningful patterns!"
+            }
           </div>
         </motion.div>
       )}
