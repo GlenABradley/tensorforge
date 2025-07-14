@@ -399,6 +399,7 @@ function App() {
                 components={levelData.available_components}
                 onAddComponent={addComponent}
                 disabled={gamePhase === 'training'}
+                level={currentLevel}
               />
               
               <motion.div 
