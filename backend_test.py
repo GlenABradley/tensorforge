@@ -266,7 +266,7 @@ class TensorForgeAPITester:
 def main():
     """Main test runner"""
     # Check if custom URL provided
-    base_url = "http://localhost:8001"
+    base_url = "https://9693a17d-b4cf-4b3c-a28a-71b543f942e5.preview.emergentagent.com"
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
     
