@@ -82,7 +82,7 @@ const TrainingPanel = ({
             transition={{ duration: 1, repeat: Infinity }}
             style={{ color: '#fbbf24', marginBottom: '0.5rem' }}
           >
-            🧠 Training Neural Network...
+            {level === 1 ? "🧠 Training Neural Network..." : "⚡ Running Network Simulation..."}
           </motion.div>
           <div style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.4 }}>
             {level === 1 
