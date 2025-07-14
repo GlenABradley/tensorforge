@@ -7,7 +7,8 @@ const TrainingPanel = ({
   isTraining, 
   results, 
   canTrain, 
-  trainingDataCount 
+  trainingDataCount,
+  level = 1
 }) => {
   const formatAccuracy = (accuracy) => {
     return `${Math.round(accuracy * 100)}%`;
@@ -20,15 +21,40 @@ const TrainingPanel = ({
   };
 
   const getTrainingMessage = () => {
-    if (trainingDataCount === 0) {
-      return "Draw some shapes first!";
-    } else if (trainingDataCount < 3) {
-      return `Need ${3 - trainingDataCount} more drawings`;
-    } else if (!canTrain) {
-      return "Add AI components first!";
-    } else {
-      return "Ready to train!";
+    if (level === 1) {
+      if (trainingDataCount === 0) {
+        return "Draw some shapes first!";
+      } else if (trainingDataCount < 3) {
+        return `Need ${3 - trainingDataCount} more drawings`;
+      } else if (!canTrain) {
+        return "Add AI components first!";
+      } else {
+        return "Ready to train!";
+      }
+    } else if (level === 2) {
+      if (trainingDataCount === 0) {
+        return "Add AI components first!";
+      } else if (trainingDataCount < 3) {
+        return `Need ${3 - trainingDataCount} more components`;
+      } else {
+        return "Ready to simulate!";
+      }
     }
+    return "Ready to proceed!";
+  };
+
+  const getStatsLabel = () => {
+    return level === 1 ? "Training Examples" : "Components Built";
+  };
+
+  const getButtonText = () => {
+    if (isTraining) {
+      return level === 1 ? "Training Neural Network..." : "Running Simulation...";
+    }
+    if (canTrain) {
+      return level === 1 ? "Start Training" : "Run Simulation";
+    }
+    return getTrainingMessage();
   };
 
   return (
