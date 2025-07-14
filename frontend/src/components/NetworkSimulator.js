@@ -102,6 +102,24 @@ const NetworkSimulator = ({ components, disabled, simulationData }) => {
       }}>
         🔄 <strong>Network Processing:</strong> Watch how your {components.length}-layer network transforms input data through each layer!
       </div>
+      
+      {/* Success Criteria Explanation */}
+      <div style={{
+        marginBottom: '1rem',
+        padding: '0.75rem',
+        background: 'rgba(245, 158, 11, 0.1)',
+        borderRadius: '6px',
+        border: '1px solid rgba(245, 158, 11, 0.2)',
+        fontSize: '0.85rem',
+        color: '#fbbf24',
+        lineHeight: 1.4
+      }}>
+        🎯 <strong>To Pass Level 2:</strong> Build a network with 85%+ efficiency by including:
+        <br />• Neural Layer (essential for processing)
+        <br />• Dense Layer(s) (for deeper learning)
+        <br />• Activation Function (for non-linearity)
+        <br />• Optional: Dropout (prevents overfitting)
+      </div>
 
       {/* Input Data Selection */}
       <div style={{ marginBottom: '1rem' }}>
