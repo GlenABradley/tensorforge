@@ -447,6 +447,14 @@ function App() {
                   drawings={drawings}
                 />
               )}
+              
+              {currentLevel === 2 && (
+                <NetworkSimulator
+                  components={playerBuild}
+                  disabled={gamePhase === 'training'}
+                  simulationData={trainingResults}
+                />
+              )}
             </div>
 
             <div className="right-panel">
