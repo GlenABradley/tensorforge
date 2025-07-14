@@ -31,8 +31,15 @@ function App() {
 
   const loadLevel = async (levelId) => {
     try {
+      console.log(`Loading level ${levelId} from ${BACKEND_URL}/api/levels/${levelId}`);
       const response = await fetch(`${BACKEND_URL}/api/levels/${levelId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
+      console.log('Level data loaded:', data);
       setLevelData(data);
       setPlayerBuild([]);
       setDrawings([]);
@@ -42,6 +49,31 @@ function App() {
       setShowCelebration(false);
     } catch (error) {
       console.error('Failed to load level:', error);
+      // Fallback level data to prevent infinite loading
+      setLevelData({
+        id: levelId,
+        title: "Train Your First AI Pet",
+        description: "Draw shapes and watch your AI learn to recognize them!",
+        objective: "Train a neural network to classify hand-drawn shapes",
+        available_components: [
+          {
+            id: "neural_layer",
+            name: "Neural Layer",
+            description: "A layer of artificial neurons",
+            type: "layer",
+            icon: "brain"
+          },
+          {
+            id: "activation",
+            name: "Activation Function",
+            description: "Makes the network learn non-linear patterns",
+            type: "function",
+            icon: "zap"
+          }
+        ],
+        target_accuracy: 0.8,
+        max_epochs: 50
+      });
     }
   };
 
