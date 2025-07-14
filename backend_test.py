@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 
 class TensorForgeAPITester:
-    def __init__(self, base_url="http://localhost:8001"):
+    def __init__(self, base_url="https://9693a17d-b4cf-4b3c-a28a-71b543f942e5.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
