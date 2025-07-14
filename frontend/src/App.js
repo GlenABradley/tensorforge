@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DrawingCanvas from './components/DrawingCanvas';
+import NetworkSimulator from './components/NetworkSimulator';
 import ComponentLibrary from './components/ComponentLibrary';
 import NetworkBuilder from './components/NetworkBuilder';
 import TrainingPanel from './components/TrainingPanel';
