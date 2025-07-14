@@ -38,10 +38,27 @@ const ComponentLibrary = ({ components, onAddComponent, disabled, level = 1 }) =
         color: '#86efac',
         lineHeight: 1.4
       }}>
-        🧠 <strong>Build Your AI Brain:</strong><br/>
-        1. Add a <strong>Neural Layer</strong> first (this recognizes patterns)<br/>
-        2. Add an <strong>Activation Function</strong> (this helps it remember)<br/>
-        3. Draw shapes to teach your AI!
+        {level === 1 ? (
+          <>
+            🧠 <strong>Build Your AI Brain:</strong><br/>
+            1. Add a <strong>Neural Layer</strong> first (this recognizes patterns)<br/>
+            2. Add an <strong>Activation Function</strong> (this helps it remember)<br/>
+            3. Draw shapes to teach your AI!
+          </>
+        ) : level === 2 ? (
+          <>
+            🔧 <strong>Build Your Neural Network:</strong><br/>
+            1. Add a <strong>Neural Layer</strong> to start processing<br/>
+            2. Stack <strong>Dense Layers</strong> for deeper learning<br/>
+            3. Add <strong>Dropout</strong> to prevent overfitting<br/>
+            4. Finish with <strong>Activation Function</strong>
+          </>
+        ) : (
+          <>
+            🚀 <strong>Build Your AI System:</strong><br/>
+            Add components to create your neural network architecture!
+          </>
+        )}
       </div>
       
       <div className="components-grid">
