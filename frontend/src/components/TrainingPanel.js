@@ -38,6 +38,33 @@ const TrainingPanel = ({
         AI Training
       </h3>
       
+      {isTraining && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            marginBottom: '1rem',
+            padding: '1rem',
+            background: 'rgba(251, 191, 36, 0.1)',
+            borderRadius: '8px',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            textAlign: 'center'
+          }}
+        >
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
+            style={{ color: '#fbbf24', marginBottom: '0.5rem' }}
+          >
+            🧠 Training Neural Network...
+          </motion.div>
+          <div style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.4 }}>
+            Your AI is learning to recognize shapes by studying your drawings. 
+            This involves adjusting thousands of connections in the neural network!
+          </div>
+        </motion.div>
+      )}
+      
       <div className="training-stats">
         <div className="stat-item">
           <span className="stat-label">Training Examples</span>
@@ -79,11 +106,15 @@ const TrainingPanel = ({
         whileHover={canTrain && !isTraining ? { scale: 1.02 } : {}}
         whileTap={canTrain && !isTraining ? { scale: 0.98 } : {}}
         animate={isTraining ? { 
-          background: ['#dc2626', '#b91c1c', '#dc2626'],
+          background: [
+            'linear-gradient(135deg, #f59e0b, #d97706)',
+            'linear-gradient(135deg, #fbbf24, #f59e0b)',
+            'linear-gradient(135deg, #f59e0b, #d97706)'
+          ],
           boxShadow: [
-            '0 0 20px rgba(220, 38, 38, 0.3)',
-            '0 0 30px rgba(220, 38, 38, 0.5)',
-            '0 0 20px rgba(220, 38, 38, 0.3)'
+            '0 0 20px rgba(245, 158, 11, 0.3)',
+            '0 0 30px rgba(245, 158, 11, 0.5)',
+            '0 0 20px rgba(245, 158, 11, 0.3)'
           ]
         } : {}}
         transition={{ duration: 1, repeat: isTraining ? Infinity : 0 }}
@@ -94,9 +125,9 @@ const TrainingPanel = ({
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             >
-              <Square size={16} />
+              <TrendingUp size={16} />
             </motion.div>
-            Training AI...
+            Training Neural Network...
           </>
         ) : (
           <>
