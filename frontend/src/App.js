@@ -149,57 +149,119 @@ function App() {
   };
 
   const startTraining = async () => {
-    if (trainingData.length < 3) {
-      alert('Draw at least 3 shapes to train your AI!');
-      return;
-    }
-
-    setIsTraining(true);
-    setGamePhase('training');
-    setAiPersonality('excited');
-
-    try {
-      console.log('Starting training with data:', trainingData);
-      
-      const response = await fetch(`${BACKEND_URL}/api/train-shape-classifier`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          drawings: trainingData.map(d => ({ points: d.drawing })),
-          labels: trainingData.map(d => d.label)
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    // Level-specific training logic
+    if (currentLevel === 1) {
+      // Level 1: Shape classifier training
+      if (trainingData.length < 3) {
+        alert('Draw at least 3 shapes to train your AI!');
+        return;
       }
 
-      const results = await response.json();
-      console.log('Training results:', results);
-      setTrainingResults(results);
-      
-      if (results.success) {
-        setGamePhase('complete');
-        setShowCelebration(true);
-        setAiPersonality('confident');
+      setIsTraining(true);
+      setGamePhase('training');
+      setAiPersonality('excited');
+
+      try {
+        console.log('Starting training with data:', trainingData);
         
-        // Celebration timeout
-        setTimeout(() => {
-          setShowCelebration(false);
-        }, 4000);
-      } else {
+        const response = await fetch(`${BACKEND_URL}/api/train-shape-classifier`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            drawings: trainingData.map(d => ({ points: d.drawing })),
+            labels: trainingData.map(d => d.label)
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const results = await response.json();
+        console.log('Training results:', results);
+        setTrainingResults(results);
+        
+        if (results.success) {
+          setGamePhase('complete');
+          setShowCelebration(true);
+          setAiPersonality('confident');
+          
+          // Celebration timeout
+          setTimeout(() => {
+            setShowCelebration(false);
+          }, 4000);
+        } else {
+          setGamePhase('building');
+          setAiPersonality('curious');
+        }
+      } catch (error) {
+        console.error('Training failed:', error);
+        alert(`Training failed: ${error.message}. Please try again.`);
         setGamePhase('building');
         setAiPersonality('curious');
+      } finally {
+        setIsTraining(false);
       }
-    } catch (error) {
-      console.error('Training failed:', error);
-      alert(`Training failed: ${error.message}. Please try again.`);
-      setGamePhase('building');
-      setAiPersonality('curious');
-    } finally {
-      setIsTraining(false);
+    } else if (currentLevel === 2) {
+      // Level 2: Network simulation
+      if (playerBuild.length < 3) {
+        alert('Build at least 3 components to run the simulation!');
+        return;
+      }
+
+      setIsTraining(true);
+      setGamePhase('training');
+      setAiPersonality('excited');
+
+      try {
+        console.log('Starting network simulation with components:', playerBuild);
+        
+        const response = await fetch(`${BACKEND_URL}/api/simulate-build`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            components: playerBuild.map(comp => ({
+              name: comp.name,
+              type: comp.type,
+              id: comp.id
+            })),
+            level_id: currentLevel
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const results = await response.json();
+        console.log('Simulation results:', results);
+        setTrainingResults(results);
+        
+        if (results.success) {
+          setGamePhase('complete');
+          setShowCelebration(true);
+          setAiPersonality('confident');
+          
+          // Celebration timeout
+          setTimeout(() => {
+            setShowCelebration(false);
+          }, 4000);
+        } else {
+          setGamePhase('building');
+          setAiPersonality('curious');
+        }
+      } catch (error) {
+        console.error('Simulation failed:', error);
+        alert(`Simulation failed: ${error.message}. Please try again.`);
+        setGamePhase('building');
+        setAiPersonality('curious');
+      } finally {
+        setIsTraining(false);
+      }
     }
   };
 
