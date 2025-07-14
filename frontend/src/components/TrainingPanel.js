@@ -66,6 +66,28 @@ const TrainingPanel = ({
         AI Training
       </h3>
       
+      {level === 2 && !isTraining && trainingDataCount >= 3 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            marginBottom: '1rem',
+            padding: '0.75rem',
+            background: 'rgba(245, 158, 11, 0.1)',
+            borderRadius: '6px',
+            border: '1px solid rgba(245, 158, 11, 0.2)',
+            fontSize: '0.8rem',
+            color: '#fbbf24',
+            lineHeight: 1.4
+          }}
+        >
+          🎯 <strong>Your network will be evaluated on:</strong><br/>
+          • Having essential components (Neural Layer, Activation)<br/>
+          • Architecture depth and diversity<br/>
+          • Overall efficiency (need 85%+ to pass)
+        </motion.div>
+      )}
+      
       {isTraining && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
