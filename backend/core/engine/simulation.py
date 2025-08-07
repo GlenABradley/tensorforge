@@ -63,7 +63,9 @@ class ComputationGraph:
             
             # Execute component
             try:
-                current_data = implementation(current_data, **node.parameters)
+                # Ensure parameters is a proper dict
+                params = node.parameters if isinstance(node.parameters, dict) else {}
+                current_data = implementation(current_data, **params)
                 self.intermediate_results[node_id] = current_data
             except Exception as e:
                 raise RuntimeError(f"Error executing component {node.component_id}: {str(e)}")
