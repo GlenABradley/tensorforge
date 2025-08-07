@@ -117,7 +117,7 @@ class TensorForgeSimulationEngine:
             component_ids.append(comp_id.lower())
         
         for required in required_components:
-            if not any(required.lower() in comp_type for comp_type in component_ids):
+            if not any(required.lower() in comp_id for comp_id in component_ids):
                 issues.append(ValidationIssue(
                     type="missing_required_component",
                     component_id=required,
