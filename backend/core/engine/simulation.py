@@ -216,8 +216,12 @@ class TensorForgeSimulationEngine:
         # Check for activation after layers
         has_layer = False
         for i, comp in enumerate(components):
-            comp_type = comp.get("type", "")
-            comp_id = comp.get("id", comp.get("name", ""))
+            if isinstance(comp, dict):
+                comp_type = comp.get("type", "")
+                comp_id = comp.get("id", comp.get("name", ""))
+            else:
+                comp_type = getattr(comp, 'type', "")
+                comp_id = getattr(comp, 'id', "")
             
             if "layer" in comp_id.lower() or comp_type == "layer":
                 has_layer = True
