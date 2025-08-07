@@ -3,8 +3,8 @@ Adaptive Hint System
 Provides intelligent, context-aware hints based on player progress and mistakes.
 """
 from typing import List, Dict, Any, Optional
-from ..models.game_models import Hint, HintAnalysis, ComponentBuild, ValidationResult, PlayerProgress
-from ..levels.manager import levels_manager
+from models.game_models import Hint, HintAnalysis, ComponentBuild, ValidationResult, PlayerProgress
+from core.levels.manager import levels_manager
 import random
 
 class AdaptiveHintSystem:
