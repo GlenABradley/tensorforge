@@ -7,12 +7,12 @@ from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 import torch
 
-from ..models.game_models import ComponentBuild, SimulationResult, PlayerProgress, Hint
-from ..core.levels.manager import levels_manager
-from ..core.engine.simulation import simulation_engine
-from ..core.education.hints import hint_system
-from ..core.education.progress import concept_tracker, learning_analytics
-from ..core.components.registry import component_registry
+from models.game_models import ComponentBuild, SimulationResult, PlayerProgress, Hint
+from core.levels.manager import levels_manager
+from core.engine.simulation import simulation_engine
+from core.education.hints import hint_system
+from core.education.progress import concept_tracker, learning_analytics
+from core.components.registry import component_registry
 
 # API Models
 class TrainingData(BaseModel):
