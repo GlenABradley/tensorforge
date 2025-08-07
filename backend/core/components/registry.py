@@ -5,7 +5,7 @@ Manages all available components and their implementations.
 from typing import Dict, List, Optional, Callable, Any
 import torch
 import torch.nn as nn
-from ..models.game_models import Component, ComponentType, TensorSpec
+from models.game_models import Component, ComponentType, TensorSpec
 from collections import defaultdict
 
 class ComponentRegistry:
