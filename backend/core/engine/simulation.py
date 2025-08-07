@@ -287,51 +287,44 @@ class TensorForgeSimulationEngine:
     
     def _evaluate_level_2(self, results: Dict[str, torch.Tensor], build: ComponentBuild) -> Tuple[bool, float, str, Dict]:
         """Evaluate Level 2 - Network Building"""
-        score = 0.6  # Base score
-        
-        # Check component diversity
-        component_types = set()
-        for comp in build.components:
-            comp_id = comp.get("id", comp.get("name", ""))
-            if "neural" in comp_id.lower():
-                component_types.add("neural")
-            elif "dense" in comp_id.lower():
-                component_types.add("dense")  
-            elif "activation" in comp_id.lower():
-                component_types.add("activation")
-            elif "dropout" in comp_id.lower():
-                component_types.add("dropout")
-        
-        # Scoring bonuses
-        if "neural" in component_types:
-            score += 0.15
-        if "activation" in component_types:
-            score += 0.1
-        if "dense" in component_types:
-            score += 0.1
-        if len(component_types) >= 3:
-            score += 0.05
-        
-        score = min(0.95, score)
-        success = score >= 0.85
-        
-        if success:
-            message = f"Excellent network! Your {len(build.components)}-layer network achieved {score:.1%} efficiency."
-        else:
-            missing = []
-            if "neural" not in component_types:
-                missing.append("Neural Layer")
-            if "activation" not in component_types:
-                missing.append("Activation Function") 
-            message = f"Network needs improvement. Consider adding: {', '.join(missing)}. Current efficiency: {score:.1%}"
-        
-        visual_data = {
-            "efficiency": score,
-            "component_breakdown": dict(component_types),
-            "network_depth": len(build.components)
-        }
-        
-        return success, score, message, visual_data
+        try:
+            score = 0.6  # Base score
+            
+            # Simple component counting and scoring
+            component_count = len(build.components)
+            score += min(0.3, component_count * 0.1)
+            
+            # Check for essential components
+            component_ids = []
+            for comp in build.components:
+                if isinstance(comp, dict):
+                    comp_id = comp.get("id", "").lower()
+                else:
+                    comp_id = getattr(comp, 'id', "").lower()
+                component_ids.append(comp_id)
+            
+            if any("neural" in comp_id for comp_id in component_ids):
+                score += 0.1
+            if any("activation" in comp_id for comp_id in component_ids):
+                score += 0.1
+            
+            score = min(0.95, score)
+            success = score >= 0.85
+            
+            message = f"Network efficiency: {score:.1%}. " + (
+                "Great architecture!" if success else "Try adding more components."
+            )
+            
+            visual_data = {
+                "efficiency": score,
+                "network_depth": component_count
+            }
+            
+            return success, score, message, visual_data
+            
+        except Exception as e:
+            # Fallback evaluation
+            return False, 0.5, f"Evaluation error: {str(e)}", {}
     
     def _evaluate_level_3(self, results: Dict[str, torch.Tensor], build: ComponentBuild) -> Tuple[bool, float, str, Dict]:
         """Evaluate Level 3 - Pattern Detection"""
