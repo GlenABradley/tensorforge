@@ -7,8 +7,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 from dataclasses import dataclass
-from ..models.game_models import ComponentBuild, SimulationResult, ValidationResult, ValidationIssue
-from ..components.registry import component_registry
+from models.game_models import ComponentBuild, SimulationResult, ValidationResult, ValidationIssue
+from core.components.registry import component_registry
 
 @dataclass
 class ComponentNode:
