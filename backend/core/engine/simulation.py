@@ -150,10 +150,15 @@ class TensorForgeSimulationEngine:
             
             # Build computation graph from components
             for i, component in enumerate(build.components):
-                comp_id = component.get("id", component.get("name", f"component_{i}"))
-                node_id = f"node_{i}"
-                parameters = component.get("parameters", {})
+                # Handle component as dict or object
+                if isinstance(component, dict):
+                    comp_id = component.get("id", component.get("name", f"component_{i}"))
+                    parameters = component.get("parameters", {})
+                else:
+                    comp_id = getattr(component, 'id', f"component_{i}")
+                    parameters = getattr(component, 'parameters', {})
                 
+                node_id = f"node_{i}"
                 self.computation_graph.add_component(comp_id, node_id, parameters)
             
             # Generate or use provided input data
