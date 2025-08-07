@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 
 class TensorForgeAPITester:
-    def __init__(self, base_url="https://9693a17d-b4cf-4b3c-a28a-71b543f942e5.preview.emergentagent.com"):
+    def __init__(self, base_url="https://472b03e2-49c6-4e1d-a49b-f4a6b3bcb67a.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -266,7 +266,7 @@ class TensorForgeAPITester:
 def main():
     """Main test runner"""
     # Check if custom URL provided
-    base_url = "https://9693a17d-b4cf-4b3c-a28a-71b543f942e5.preview.emergentagent.com"
+    base_url = "https://472b03e2-49c6-4e1d-a49b-f4a6b3bcb67a.preview.emergentagent.com"
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
     
