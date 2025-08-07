@@ -4,8 +4,8 @@ Tracks concept mastery, learning analytics, and adaptive difficulty.
 """
 from typing import Dict, List, Any, Optional
 from enum import Enum
-from ..models.game_models import PlayerProgress, MasteryLevel, ComponentBuild
-from ..levels.manager import levels_manager
+from models.game_models import PlayerProgress, MasteryLevel, ComponentBuild
+from core.levels.manager import levels_manager
 import json
 from pathlib import Path
 
