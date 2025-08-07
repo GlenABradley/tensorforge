@@ -1,10 +1,11 @@
 """
-Enhanced Levels Manager
-Manages educational AI levels with comprehensive progression system.
+Enhanced Levels Manager - Configuration Driven
+Manages educational AI levels with comprehensive progression system using YAML configuration.
 """
 from typing import Dict, List, Optional, Any
 from models.game_models import LevelConfig, PlayerProgress, ComponentType
 from core.components.registry import component_registry
+from config.config_loader import config_loader
 import json
 import os
 
@@ -14,7 +15,7 @@ class LevelsManager:
     def __init__(self):
         self.levels: Dict[int, LevelConfig] = {}
         self.level_dependencies: Dict[int, List[int]] = {}
-        self._initialize_levels()
+        self._initialize_levels_from_config()
     
     def get_level(self, level_id: int) -> Optional[LevelConfig]:
         """Get level configuration by ID"""
@@ -114,10 +115,55 @@ class LevelsManager:
         import time
         return int(time.time())
     
-    def _initialize_levels(self):
-        """Initialize all levels with their configurations"""
-        
-        # Level 1: Train Your First AI Pet
+    def _initialize_levels_from_config(self):
+        """Initialize levels from YAML configuration"""
+        try:
+            levels_config = config_loader.get_all_levels()
+            
+            for level_id, level_data in levels_config.items():
+                # Convert level_id to int if it's a string
+                if isinstance(level_id, str):
+                    level_id = int(level_id)
+                
+                # Create LevelConfig from YAML data
+                self.levels[level_id] = LevelConfig(
+                    id=level_data.get('id', level_id),
+                    title=level_data.get('title', f'Level {level_id}'),
+                    description=level_data.get('description', ''),
+                    objective=level_data.get('objective', ''),
+                    concepts=level_data.get('concepts', []),
+                    available_components=level_data.get('available_components', []),
+                    success_criteria=level_data.get('success_criteria', {}),
+                    hints=level_data.get('hints', []),
+                    educational_content=level_data.get('educational_content', {}),
+                    type=level_data.get('type', 'standard'),
+                    prerequisites=level_data.get('prerequisites', []),
+                    max_attempts=level_data.get('max_attempts'),
+                    time_limit=level_data.get('time_limit')
+                )
+            
+            print(f"📚 Loaded {len(self.levels)} levels from configuration")
+            
+            # Validate configuration
+            validation_result = config_loader.validate_config()
+            if validation_result["errors"]:
+                print("⚠️  Configuration errors found:")
+                for error in validation_result["errors"]:
+                    print(f"   - {error}")
+            
+            if validation_result["warnings"]:
+                print("⚠️  Configuration warnings:")
+                for warning in validation_result["warnings"]:
+                    print(f"   - {warning}")
+                    
+        except Exception as e:
+            print(f"❌ Error loading levels from config: {e}")
+            print("   Falling back to hardcoded levels...")
+            self._initialize_fallback_levels()
+    
+    def _initialize_fallback_levels(self):
+        """Fallback to hardcoded levels if config fails"""
+        # Keep the original hardcoded levels as fallback
         self.levels[1] = LevelConfig(
             id=1,
             title="Train Your First AI Pet",
@@ -147,7 +193,6 @@ class LevelsManager:
             type="standard"
         )
         
-        # Level 2: Build Your First Neural Network  
         self.levels[2] = LevelConfig(
             id=2,
             title="Build Your First Neural Network", 
@@ -178,72 +223,6 @@ class LevelsManager:
             },
             type="standard",
             prerequisites=[1]
-        )
-        
-        # Level 3: Pattern Detective
-        self.levels[3] = LevelConfig(
-            id=3,
-            title="Pattern Detective",
-            description="Build an AI that finds hidden patterns in data", 
-            objective="Create a simple linear model to find patterns",
-            concepts=["linear_models", "weights", "bias", "pattern_recognition"],
-            available_components=["neural_layer", "activation_relu", "dense_layer", "tensor_add", "tensor_multiply"],
-            success_criteria={
-                "accuracy_threshold": 0.75,
-                "pattern_recognition": True,
-                "required_operations": ["tensor_add", "tensor_multiply"]
-            },
-            hints=[
-                "Use tensor operations to transform your input data.",
-                "Try combining addition and multiplication to find patterns.", 
-                "Linear models use weighted combinations - multiplication helps with weighting!",
-                "Remember: your AI needs to both process (multiply) and combine (add) information."
-            ],
-            educational_content={
-                "intro": "Every AI is a pattern detective - let's teach yours to find clues!",
-                "concepts_explained": {
-                    "linear_models": "A simple AI that draws straight lines through data",
-                    "weights": "How much the AI pays attention to each input",
-                    "bias": "The AI's starting assumption about the answer",
-                    "pattern_recognition": "Finding meaningful relationships in data"
-                }
-            },
-            type="standard",
-            prerequisites=[2]
-        )
-        
-        # Mini-Boss 1: Smart Pet Challenge
-        self.levels[4] = LevelConfig(
-            id=4,
-            title="Smart Pet Challenge",
-            description="MINI-BOSS: Combine everything to create the ultimate AI pet!",
-            objective="Build a complete AI system using Levels 1-3 knowledge",
-            concepts=["integration", "multi_task_learning", "ai_systems"],
-            available_components=["neural_layer", "activation_relu", "dense_layer", "dropout", "tensor_add", "tensor_multiply"],
-            success_criteria={
-                "accuracy_threshold": 0.9,
-                "multi_task_performance": True,
-                "architecture_complexity": 4,  # At least 4 components
-                "efficiency_threshold": 0.88
-            },
-            hints=[
-                "This is a challenge level - you'll need to use everything you've learned!",
-                "Build a deep network with multiple layers for better performance.",
-                "Include regularization (Dropout) to make your AI more robust.",
-                "Use tensor operations to preprocess your data effectively.",
-                "Aim for at least 4 components in a well-structured architecture."
-            ],
-            educational_content={
-                "intro": "Time for your AI to prove itself! Can it handle multiple challenges?",
-                "victory_message": "Congratulations! Your AI pet is now officially smart!",
-                "concepts_explained": {
-                    "integration": "Combining multiple AI techniques for better performance",
-                    "multi_task_learning": "Training AI to handle several related tasks",
-                    "ai_systems": "Complete AI solutions that combine many components"
-                }
-            },
-            type="mini_boss",
-            prerequisites=[3]
         )
 
 # Global levels manager instance
