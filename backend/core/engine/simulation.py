@@ -107,10 +107,17 @@ class TensorForgeSimulationEngine:
         
         # Check for required component types based on level
         required_components = self._get_required_components(level_id)
-        component_types = [comp.get("id", comp.get("name", "")).lower() for comp in build.components]
+        component_ids = []
+        
+        for comp in build.components:
+            if isinstance(comp, dict):
+                comp_id = comp.get("id", comp.get("name", ""))
+            else:
+                comp_id = getattr(comp, 'id', "")
+            component_ids.append(comp_id.lower())
         
         for required in required_components:
-            if not any(required.lower() in comp_type for comp_type in component_types):
+            if not any(required.lower() in comp_type for comp_type in component_ids):
                 issues.append(ValidationIssue(
                     type="missing_required_component",
                     component_id=required,
