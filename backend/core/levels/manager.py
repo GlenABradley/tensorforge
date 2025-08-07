@@ -3,8 +3,8 @@ Enhanced Levels Manager
 Manages educational AI levels with comprehensive progression system.
 """
 from typing import Dict, List, Optional, Any
-from ..models.game_models import LevelConfig, PlayerProgress, ComponentType
-from ..components.registry import component_registry
+from models.game_models import LevelConfig, PlayerProgress, ComponentType
+from core.components.registry import component_registry
 import json
 import os
 
