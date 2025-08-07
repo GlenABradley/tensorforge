@@ -1,0 +1,203 @@
+# Tensor Forge Component Configuration
+# This file defines all available components and their properties
+
+components:
+  # Level 1 Components - Basic Neural Network
+  neural_layer:
+    id: "neural_layer"
+    name: "Neural Layer"
+    description: "A layer of artificial neurons that can learn"
+    type: "layer"
+    icon: "brain"
+    educational_note: "This is where the magic happens - neurons learn to recognize patterns!"
+    level_introduced: 1
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Input features"
+    output_specs:
+      - name: "output" 
+        shape: [-1, -1]
+        description: "Transformed features"
+    parameters:
+      output_size: 
+        type: "integer"
+        default: 4
+        min: 2
+        max: 64
+        description: "Number of neurons in this layer"
+
+  activation_relu:
+    id: "activation_relu"
+    name: "ReLU Activation"
+    description: "Helps the AI learn complex patterns by adding non-linearity"
+    type: "activation"
+    icon: "zap"
+    educational_note: "ReLU means 'turn negative thoughts into zero' - it helps AI focus on positive signals!"
+    level_introduced: 1
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Any tensor"
+    output_specs:
+      - name: "output"
+        shape: [-1, -1]
+        description: "ReLU activated tensor"
+
+  # Level 2 Components - Tensor Operations
+  tensor_add:
+    id: "tensor_add"
+    name: "Tensor Addition"
+    description: "Add values to tensors element-wise"
+    type: "operation"
+    icon: "plus"
+    educational_note: "Addition is how AI combines information from different sources!"
+    level_introduced: 2
+    input_specs:
+      - name: "input"
+        shape: [-1]
+        description: "Input tensor"
+    output_specs:
+      - name: "result"
+        shape: [-1]
+        description: "Sum result"
+    parameters:
+      constant:
+        type: "tensor"
+        default: [1.0, 1.0, 1.0, 1.0]
+        description: "Constant to add to input"
+
+  tensor_multiply:
+    id: "tensor_multiply"
+    name: "Tensor Multiplication"
+    description: "Multiply tensors by constants for scaling"
+    type: "operation"
+    icon: "x"
+    educational_note: "Multiplication is how AI amplifies important signals!"
+    level_introduced: 2
+    input_specs:
+      - name: "input"
+        shape: [-1]
+        description: "Input tensor"
+    output_specs:
+      - name: "result"
+        shape: [-1]
+        description: "Multiplied result"
+    parameters:
+      multiplier:
+        type: "float"
+        default: 2.0
+        min: 0.1
+        max: 10.0
+        description: "Multiplier constant"
+
+  dense_layer:
+    id: "dense_layer"
+    name: "Dense Layer"
+    description: "A fully connected layer for deeper learning"
+    type: "layer"
+    icon: "layers"
+    educational_note: "Dense layers are like AI's way of finding complex relationships in data!"
+    level_introduced: 2
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Input features"
+    output_specs:
+      - name: "output"
+        shape: [-1, -1]
+        description: "Dense layer output"
+    parameters:
+      output_size:
+        type: "integer"
+        default: 8
+        min: 2
+        max: 128
+        description: "Number of neurons in dense layer"
+
+  dropout:
+    id: "dropout"
+    name: "Dropout"
+    description: "Prevents overfitting by randomly ignoring neurons"
+    type: "regularization"
+    icon: "lightbulb"
+    educational_note: "Dropout is like teaching your AI to not rely too heavily on any single piece of information!"
+    level_introduced: 2
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Input features"
+    output_specs:
+      - name: "output"
+        shape: [-1, -1]
+        description: "Regularized output"
+    parameters:
+      dropout_rate:
+        type: "float"
+        default: 0.2
+        min: 0.0
+        max: 0.8
+        description: "Fraction of neurons to randomly ignore"
+
+  # Future Components (Level 5+)
+  batch_norm:
+    id: "batch_norm"
+    name: "Batch Normalization"
+    description: "Normalizes data to help training go faster"
+    type: "regularization"
+    icon: "balance-scale"
+    educational_note: "Batch norm is like giving your AI a consistent, balanced diet of data!"
+    level_introduced: 5
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Input features"
+    output_specs:
+      - name: "output"
+        shape: [-1, -1]  
+        description: "Normalized output"
+
+  memory_cell:
+    id: "memory_cell"
+    name: "Memory Cell"
+    description: "Stores information for sequential processing"
+    type: "memory"
+    icon: "database"
+    educational_note: "Memory cells let your AI remember what it learned from earlier inputs!"
+    level_introduced: 6
+    input_specs:
+      - name: "input"
+        shape: [-1, -1]
+        description: "Current input"
+      - name: "prev_state"
+        shape: [-1, -1]
+        description: "Previous memory state"
+    output_specs:
+      - name: "output"
+        shape: [-1, -1]
+        description: "New output"
+      - name: "new_state"
+        shape: [-1, -1]
+        description: "Updated memory state"
+
+# Component categories for UI organization
+categories:
+  basic:
+    name: "Basic Components"
+    description: "Essential building blocks for any AI"
+    components: ["neural_layer", "activation_relu"]
+    
+  operations:
+    name: "Tensor Operations" 
+    description: "Mathematical operations on data"
+    components: ["tensor_add", "tensor_multiply"]
+    
+  advanced_layers:
+    name: "Advanced Layers"
+    description: "Sophisticated processing components"
+    components: ["dense_layer", "dropout", "batch_norm"]
+    
+  memory:
+    name: "Memory & Sequences"
+    description: "Components for sequential data processing"
+    components: ["memory_cell", "lstm_layer"]
